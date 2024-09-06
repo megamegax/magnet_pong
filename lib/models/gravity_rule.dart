@@ -1,0 +1,1 @@
+enum GravityRule { attractSameColor, repelSameColor }
