@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:gravity_pong/models/ball.dart';
-import 'package:gravity_pong/models/paddle.dart';
-import 'package:gravity_pong/state/game_state.dart';
+import 'package:magnet_pong/models/ball.dart';
+import 'package:magnet_pong/models/paddle.dart';
+import 'package:magnet_pong/state/game_state.dart';
 
 import '../models/player.dart';
 import '../models/element_type.dart';
@@ -26,7 +26,7 @@ class AIPlayer extends Player {
       GameState state,
       Function(Player player, double delta) movePaddle,
       Function(Player player) shootBall) {
-    _controlTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+    _controlTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       _paddleCharge += 0.1;
 
       final ball = _findIncomingBall(state);

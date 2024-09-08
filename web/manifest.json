@@ -1,6 +1,6 @@
 {
-    "name": "gravity_pong",
-    "short_name": "gravity_pong",
+    "name": "magnet_pong",
+    "short_name": "magnet_pong",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

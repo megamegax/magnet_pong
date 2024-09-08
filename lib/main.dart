@@ -1,17 +1,18 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gravity_pong/screens/home_screen.dart';
-import 'package:gravity_pong/screens/lobby_screen.dart';
+import 'package:magnet_pong/screens/home_screen.dart';
+import 'package:magnet_pong/screens/lobby_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
   runApp(ProviderScope(child: PlasmaGame()));
 }
 
 class PlasmaGame extends StatelessWidget {
+  const PlasmaGame({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

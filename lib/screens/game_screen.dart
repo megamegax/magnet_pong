@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gravity_pong/models/gravity_rule.dart';
-import 'package:gravity_pong/models/player_position.dart';
-import 'package:gravity_pong/state/game_state_args.dart';
-import 'package:gravity_pong/painters/game_painter.dart';
+import 'package:magnet_pong/models/gravity_rule.dart';
+import 'package:magnet_pong/models/player_position.dart';
+import 'package:magnet_pong/state/game_state_args.dart';
+import 'package:magnet_pong/painters/game_painter.dart';
 import '../models/player.dart';
 import '../state/game_state_notifier.dart';
 
@@ -53,7 +53,7 @@ class GameScreen extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Container(
                     width: 100,
                     height: 10,
@@ -82,7 +82,7 @@ class GameScreen extends ConsumerWidget {
               );
             }).toList(),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: GestureDetector(
               onPanUpdate: (details) {

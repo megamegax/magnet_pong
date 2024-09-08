@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gravity_pong/models/player_position.dart';
+import 'package:magnet_pong/models/player_position.dart';
 import '../state/game_state.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
@@ -155,12 +155,12 @@ class GamePainter extends CustomPainter {
   void _drawWinnerMessage(
       Canvas canvas, Size size, String winnerName, ThemeData theme) {
     final textStyle = theme.textTheme.headlineLarge?.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: theme.colorScheme.onSurface,
       shadows: [
         Shadow(
           blurRadius: 10.0,
           color: theme.colorScheme.primary,
-          offset: Offset(0, 0),
+          offset: const Offset(0, 0),
         ),
       ],
     );

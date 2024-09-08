@@ -1,4 +1,4 @@
-# gravity_pong
+# magnet_pong
 
 A new Flutter project.
 

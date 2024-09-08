@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gravity_pong/models/element_type.dart';
-import 'package:gravity_pong/models/player_position.dart';
-import 'package:gravity_pong/widgets/neon_button.dart';
-import 'package:gravity_pong/widgets/neon_text.dart';
+import 'package:magnet_pong/models/element_type.dart';
+import 'package:magnet_pong/models/player_position.dart';
+import 'package:magnet_pong/widgets/neon_button.dart';
+import 'package:magnet_pong/widgets/neon_text.dart';
 import '../models/player.dart';
 import '../state/lobby_state_notifier.dart';
 import 'waiting_room_screen.dart';
 import 'host_settings_screen.dart';
 
 class LobbyScreen extends ConsumerWidget {
+  const LobbyScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lobbiesStream = ref.watch(allLobbiesStreamProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: NeonText('Join or Host a Game'),
+        title: const NeonText('Join or Host a Game'),
       ),
       body: Column(
         children: [
@@ -24,7 +26,7 @@ class LobbyScreen extends ConsumerWidget {
             child: lobbiesStream.when(
               data: (lobbies) {
                 if (lobbies.isEmpty) {
-                  return Center(child: NeonText('No available lobbies.'));
+                  return const Center(child: NeonText('No available lobbies.'));
                 }
                 return ListView.builder(
                   itemCount: lobbies.length,
@@ -32,7 +34,7 @@ class LobbyScreen extends ConsumerWidget {
                     final lobby = lobbies[index];
                     return ListTile(
                       title: Text(
-                          'Host: ${lobby.players.first.name} (${lobby.players.length}/4)'),
+                          'Host: ${lobby.name} (${lobby.players.length}/4)'),
                       subtitle: Text('Lobby ID: ${lobby.id}'),
                       onTap: lobby.players.length < 4
                           ? () {
@@ -44,7 +46,7 @@ class LobbyScreen extends ConsumerWidget {
                   },
                 );
               },
-              loading: () => Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (err, stack) => Center(child: NeonText('Error: $err')),
             ),
           ),
@@ -77,18 +79,19 @@ class LobbyScreen extends ConsumerWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: NeonText('Join Lobby'),
+              title: const NeonText('Join Lobby'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: nameController,
-                    decoration: InputDecoration(hintText: 'Enter your name'),
+                    decoration:
+                        const InputDecoration(hintText: 'Enter your name'),
                   ),
-                  SizedBox(height: 20),
-                  NeonText('Select Your Element:'),
+                  const SizedBox(height: 20),
+                  const NeonText('Select Your Element:'),
                   ListTile(
-                    title: NeonText('Water'),
+                    title: const NeonText('Water'),
                     leading: Radio<ElementType>(
                       value: ElementType.water,
                       groupValue: selectedElement,
@@ -100,7 +103,7 @@ class LobbyScreen extends ConsumerWidget {
                     ),
                   ),
                   ListTile(
-                    title: NeonText('Fire'),
+                    title: const NeonText('Fire'),
                     leading: Radio<ElementType>(
                       value: ElementType.fire,
                       groupValue: selectedElement,
@@ -112,7 +115,7 @@ class LobbyScreen extends ConsumerWidget {
                     ),
                   ),
                   ListTile(
-                    title: NeonText('Stone'),
+                    title: const NeonText('Stone'),
                     leading: Radio<ElementType>(
                       value: ElementType.stone,
                       groupValue: selectedElement,
@@ -124,7 +127,7 @@ class LobbyScreen extends ConsumerWidget {
                     ),
                   ),
                   ListTile(
-                    title: NeonText('Air'),
+                    title: const NeonText('Air'),
                     leading: Radio<ElementType>(
                       value: ElementType.air,
                       groupValue: selectedElement,
@@ -167,20 +170,20 @@ class LobbyScreen extends ConsumerWidget {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: NeonText('Unable to Join'),
-                          content: NeonText(
+                          title: const NeonText('Unable to Join'),
+                          content: const NeonText(
                               'The lobby could not be joined. Please try again later.'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(),
-                              child: NeonText('OK'),
+                              child: const NeonText('OK'),
                             ),
                           ],
                         ),
                       );
                     }
                   },
-                  child: NeonText('Join'),
+                  child: const NeonText('Join'),
                 ),
               ],
             );

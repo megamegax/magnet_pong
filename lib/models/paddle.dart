@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:gravity_pong/models/player.dart';
+import 'package:magnet_pong/models/player.dart';
 
 class Paddle {
   Offset position;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gravity_pong/models/color_utils.dart';
-import 'package:gravity_pong/models/player_position.dart';
-import 'package:gravity_pong/widgets/neon_button.dart';
-import 'package:gravity_pong/widgets/neon_text.dart';
+import 'package:magnet_pong/models/color_utils.dart';
+import 'package:magnet_pong/models/player_position.dart';
+import 'package:magnet_pong/widgets/neon_button.dart';
+import 'package:magnet_pong/widgets/neon_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/player.dart';
 import '../models/element_type.dart';
@@ -12,6 +12,8 @@ import '../state/lobby_state_notifier.dart';
 import 'waiting_room_screen.dart';
 
 class HostSettingsScreen extends ConsumerStatefulWidget {
+  const HostSettingsScreen({super.key});
+
   @override
   _HostSettingsScreenState createState() => _HostSettingsScreenState();
 }
@@ -40,7 +42,7 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: NeonText('Host Settings', style: TextStyle(fontSize: 20)),
+        title: const NeonText('Host Settings', style: TextStyle(fontSize: 20)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -48,12 +50,13 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
           children: [
             TextField(
               controller: _hostNameController,
-              decoration: InputDecoration(labelText: 'Host Name'),
+              decoration: const InputDecoration(labelText: 'Host Name'),
             ),
-            SizedBox(height: 20),
-            NeonText('Select Gravity Rule:', style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            const NeonText('Select Gravity Rule:',
+                style: TextStyle(fontSize: 20)),
             ListTile(
-              title: NeonText('Attract same color'),
+              title: const NeonText('Attract same color'),
               leading: Radio<GravityRule>(
                 value: GravityRule.attractSameColor,
                 groupValue: _selectedRule,
@@ -65,7 +68,7 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
               ),
             ),
             ListTile(
-              title: NeonText('Repel same color'),
+              title: const NeonText('Repel same color'),
               leading: Radio<GravityRule>(
                 value: GravityRule.repelSameColor,
                 groupValue: _selectedRule,
@@ -76,10 +79,11 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
                 },
               ),
             ),
-            SizedBox(height: 20),
-            NeonText('Select Your Element:', style: TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            const NeonText('Select Your Element:',
+                style: TextStyle(fontSize: 20)),
             ListTile(
-              title: NeonText('Fire'),
+              title: const NeonText('Fire'),
               leading: Radio<ElementType>(
                 value: ElementType.fire,
                 groupValue: _selectedElement,
@@ -91,7 +95,7 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
               ),
             ),
             ListTile(
-              title: NeonText('Water'),
+              title: const NeonText('Water'),
               leading: Radio<ElementType>(
                 value: ElementType.water,
                 groupValue: _selectedElement,
@@ -103,7 +107,7 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
               ),
             ),
             ListTile(
-              title: NeonText('Stone'),
+              title: const NeonText('Stone'),
               leading: Radio<ElementType>(
                 value: ElementType.stone,
                 groupValue: _selectedElement,
@@ -115,7 +119,7 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
               ),
             ),
             ListTile(
-              title: NeonText('Air'),
+              title: const NeonText('Air'),
               leading: Radio<ElementType>(
                 value: ElementType.air,
                 groupValue: _selectedElement,
@@ -126,7 +130,7 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
                 },
               ),
             ),
-            Spacer(),
+            const Spacer(),
             NeonButton(
               verticalPadding: 15,
               horizontalPadding: 20,
@@ -158,7 +162,7 @@ class _HostSettingsScreenState extends ConsumerState<HostSettingsScreen> {
               },
               text: 'Create Lobby',
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),

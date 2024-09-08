@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gravity_pong/widgets/neon_button.dart';
-import 'package:gravity_pong/widgets/neon_text.dart';
+import 'package:magnet_pong/widgets/neon_button.dart';
+import 'package:magnet_pong/widgets/neon_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
+  const SettingsScreen({super.key});
+
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
@@ -39,7 +41,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background, // Háttér szín a témából
+      backgroundColor: theme.colorScheme.surface, // Háttér szín a témából
       appBar: AppBar(
         title: Text('Settings', style: theme.textTheme.titleLarge),
       ),
@@ -49,9 +51,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             NeonText('Player Name:', style: theme.textTheme.titleLarge),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _buildNeonTextField(_nameController, theme),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Center(
               child: NeonButton(
                   text: 'Save',

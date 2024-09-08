@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:gravity_pong/models/player_position.dart';
+import 'package:magnet_pong/models/player_position.dart';
 
 import '../models/paddle.dart';
 import '../models/ball.dart';
@@ -45,25 +45,25 @@ class GameState {
         paddles: {
           if (activePlayers.isNotEmpty)
             PlayerPosition.left: Paddle(
-                position: Offset(10, 200),
+                position: const Offset(10, 200),
                 width: 20,
                 height: 100,
                 player: activePlayers[0]),
           if (activePlayers.length > 1)
             PlayerPosition.right: Paddle(
-                position: Offset(680, 200),
+                position: const Offset(680, 200),
                 width: 20,
                 height: 100,
                 player: activePlayers[1]),
           if (activePlayers.length > 2)
             PlayerPosition.top: Paddle(
-                position: Offset(200, 10),
+                position: const Offset(200, 10),
                 width: 100,
                 height: 20,
                 player: activePlayers[2]),
           if (activePlayers.length > 3)
             PlayerPosition.bottom: Paddle(
-                position: Offset(200, 380),
+                position: const Offset(200, 380),
                 width: 100,
                 height: 20,
                 player: activePlayers[3]),

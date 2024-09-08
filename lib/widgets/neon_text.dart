@@ -23,7 +23,7 @@ class NeonText extends StatelessWidget {
           Shadow(
             blurRadius: 20.0,
             color: theme.colorScheme.primary,
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
           ),
         ],
       ),

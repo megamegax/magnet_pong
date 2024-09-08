@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gravity_pong/ai/ai_player.dart';
+import 'package:magnet_pong/ai/ai_player.dart';
 import '../models/ball.dart';
 import '../models/element_type.dart';
 import '../models/gravity_rule.dart';
@@ -19,15 +19,13 @@ class GameStateNotifier extends StateNotifier<GameState> {
     _startFieldRotationUpdate();
     _startChargeUpdate();
     _startBallUpdate();
-    activePlayers.forEach(
-      (player) {
-        if (player.isAI) {
-          AIPlayer aiPlayer = AIPlayer(player: player);
-          startAIPlayer(aiPlayer);
-          aiPlayers.add(aiPlayer);
-        }
-      },
-    );
+    for (var player in activePlayers) {
+      if (player.isAI) {
+        AIPlayer aiPlayer = AIPlayer(player: player);
+        startAIPlayer(aiPlayer);
+        aiPlayers.add(aiPlayer);
+      }
+    }
   }
   List<AIPlayer> aiPlayers = [];
   Timer? _aiTimer;
@@ -36,7 +34,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
   Timer? _ballUpdateTimer;
 
   void _startChargeUpdate() {
-    _chargeTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+    _chargeTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       final newPaddles = {
         for (var entry in state.paddles.entries)
           entry.key: entry.value.updateCharge(0.5)
@@ -46,7 +44,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
   }
 
   void _startFieldRotationUpdate() {
-    _fieldRotationTimer = Timer.periodic(Duration(milliseconds: 64), (timer) {
+    _fieldRotationTimer =
+        Timer.periodic(const Duration(milliseconds: 64), (timer) {
       if (state.balls.isEmpty) {
         state = state.copyWith(
           rotationX: 0.0,
@@ -67,7 +66,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
         totalWeight += ball.mass;
       }
 
-      final double maxRotation = 0.5; // Forgatás maximális értéke
+      const double maxRotation = 0.5; // Forgatás maximális értéke
       final double rotationX =
           (weightedSumY / totalWeight) * maxRotation / centerY;
       final double rotationY =
@@ -82,7 +81,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
   }
 
   void _startBallUpdate() {
-    _ballUpdateTimer = Timer.periodic(Duration(milliseconds: 16), (timer) {
+    _ballUpdateTimer =
+        Timer.periodic(const Duration(milliseconds: 16), (timer) {
       updateBallPositions();
     });
   }
@@ -97,8 +97,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
   }
 
   void updateBallPositions() {
-    final double gravityConstant = 10.0; // Gravitációs erő
-    final double maxSpeed = 5.0; // Maximális sebesség korlátozás
+    const double gravityConstant = 10.0; // Gravitációs erő
+    const double maxSpeed = 5.0; // Maximális sebesség korlátozás
 
     List<Ball> newBalls = [];
     Map<PlayerPosition, double> updatedLives = {
@@ -185,7 +185,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
   Offset calculateTotalForce(
       Ball ballA, List<Ball> balls, double gravityConstant) {
     Offset totalForce = Offset.zero;
-    final double minDistance =
+    const double minDistance =
         20.0; // Minimális távolság a túl nagy erők elkerülése érdekében
 
     for (var ballB in balls) {
@@ -270,7 +270,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       }
 
       // Normalizáljuk a sebességet, hogy ne legyen túl gyors
-      final double maxSpeed = 20.0;
+      const double maxSpeed = 20.0;
       if (newVelocity.distance > maxSpeed) {
         newVelocity = newVelocity / newVelocity.distance * maxSpeed;
       }
@@ -389,8 +389,9 @@ class GameStateNotifier extends StateNotifier<GameState> {
       bool merged = false;
 
       for (int j = i + 1; j < balls.length; j++) {
-        if (mergedIndexes.contains(j))
+        if (mergedIndexes.contains(j)) {
           continue; // Ha már összeolvadt, átugorjuk
+        }
 
         Ball ballB = balls[j];
 
@@ -465,22 +466,22 @@ class GameStateNotifier extends StateNotifier<GameState> {
 
       switch (player.position) {
         case PlayerPosition.top:
-          velocity = Offset(0, 5); // Lefelé
+          velocity = const Offset(0, 5); // Lefelé
           spawnPosition = paddle.rect.center +
               Offset(0, paddle.rect.height / 2 + 10); // A paddle alatt
           break;
         case PlayerPosition.bottom:
-          velocity = Offset(0, -5); // Felfelé
+          velocity = const Offset(0, -5); // Felfelé
           spawnPosition = paddle.rect.center -
               Offset(0, paddle.rect.height / 2 + 10); // A paddle felett
           break;
         case PlayerPosition.left:
-          velocity = Offset(5, 0.1); // Jobbra
+          velocity = const Offset(5, 0.1); // Jobbra
           spawnPosition = paddle.rect.center +
               Offset(paddle.rect.width / 2 + 15, 0); // A paddle jobb oldalán
           break;
         case PlayerPosition.right:
-          velocity = Offset(-5, 0.1); // Balra
+          velocity = const Offset(-5, 0.1); // Balra
           spawnPosition = paddle.rect.center -
               Offset(paddle.rect.width / 2 + 15, 0); // A paddle bal oldalán
           break;
@@ -538,7 +539,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
   }
 
   void startAIPlayer(AIPlayer aiPlayer) {
-    _aiTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+    _aiTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       aiPlayer.startPlaying(state, movePaddle, shootBall);
     });
   }
@@ -585,7 +586,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     // Itt kérhetsz megerősítést a hosttól az új játék indításához
     // Például egy dialog megjelenítésével
     // Itt egy egyszerű példát mutatok, ahol az állapotot frissíted a várakozás idejére.
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 5), () {
       // Ezután indíts új játékot, ha a host úgy döntött
       _resetGame();
     });
@@ -603,13 +604,11 @@ class GameStateNotifier extends StateNotifier<GameState> {
     _startChargeUpdate();
     _startFieldRotationUpdate();
     _startBallUpdate();
-    state.activePlayers.forEach(
-      (player) {
-        if (player.isAI) {
-          startAIPlayer(AIPlayer(player: player));
-        }
-      },
-    );
+    for (var player in state.activePlayers) {
+      if (player.isAI) {
+        startAIPlayer(AIPlayer(player: player));
+      }
+    }
   }
 }
 

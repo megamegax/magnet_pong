@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gravity_pong/screens/lobby_screen.dart';
-import 'package:gravity_pong/screens/settings_screen.dart';
-import 'package:gravity_pong/widgets/neon_button.dart';
+import 'package:magnet_pong/screens/lobby_screen.dart';
+import 'package:magnet_pong/screens/settings_screen.dart';
+import 'package:magnet_pong/widgets/neon_button.dart';
 
 class MainMenu extends StatelessWidget {
+  const MainMenu({super.key});
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -15,7 +17,7 @@ class MainMenu extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Gravity Pong',
+              'Magnet Pong',
               style: theme.textTheme.headlineLarge?.copyWith(
                 color: theme.colorScheme.primary,
                 fontSize: 50,
@@ -24,26 +26,26 @@ class MainMenu extends StatelessWidget {
                   Shadow(
                     blurRadius: 20.0,
                     color: theme.colorScheme.primary,
-                    offset: Offset(0, 0),
+                    offset: const Offset(0, 0),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             NeonButton(
                 text: 'Start Game',
                 onPressed: () {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => LobbyScreen()));
                 }),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             NeonButton(
                 text: 'Settings',
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => SettingsScreen()));
                 }),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             NeonButton(
                 text: 'Exit',
                 onPressed: () {

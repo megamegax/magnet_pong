@@ -1,3 +1,4 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 
 var colorIndex = 0;
@@ -20,4 +21,43 @@ Color getNextColor(BuildContext context) {
 
 resetColors() {
   colorIndex = 0;
+}
+
+class ColorMapper extends SimpleMapper<Color> {
+  const ColorMapper();
+
+  @override
+  Color decode(dynamic value) {
+    return Color(value);
+  }
+
+  @override
+  dynamic encode(Color self) {
+    return self.value;
+  }
+}
+
+class MaterialColorMapper extends SimpleMapper<MaterialColor> {
+  const MaterialColorMapper();
+
+  @override
+  MaterialColor decode(dynamic value) {
+    return MaterialColor(value, {
+      50: Color(value),
+      100: Color(value),
+      200: Color(value),
+      300: Color(value),
+      400: Color(value),
+      500: Color(value),
+      600: Color(value),
+      700: Color(value),
+      800: Color(value),
+      900: Color(value),
+    });
+  }
+
+  @override
+  dynamic encode(MaterialColor self) {
+    return self.value;
+  }
 }
