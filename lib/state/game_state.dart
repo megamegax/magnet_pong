@@ -1,13 +1,16 @@
 import 'dart:ui';
 
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:magnet_pong/models/player_position.dart';
 
 import '../models/paddle.dart';
 import '../models/ball.dart';
 import '../models/player.dart';
 import '../models/gravity_rule.dart';
+part 'game_state.mapper.dart';
 
-class GameState {
+@MappableClass(includeCustomMappers: [SizeMapper()])
+class GameState with GameStateMappable {
   final Map<PlayerPosition, Paddle> paddles;
   final Map<PlayerPosition, double> lives;
 
@@ -77,31 +80,18 @@ class GameState {
         fieldSize: Size.zero,
         lives: initialLives);
   }
+}
 
-  GameState copyWith(
-      {Map<PlayerPosition, Paddle>? paddles,
-      List<Ball>? balls,
-      Player? currentPlayer,
-      List<Player>? activePlayers,
-      double? rotationX,
-      double? rotationY,
-      GravityRule? gravityRule,
-      Size? fieldSize,
-      Map<PlayerPosition, double>? lives,
-      bool? isGameOver,
-      String? winnerName}) {
-    return GameState(
-      paddles: paddles ?? this.paddles,
-      balls: balls ?? this.balls,
-      currentPlayer: currentPlayer ?? this.currentPlayer,
-      activePlayers: activePlayers ?? this.activePlayers,
-      rotationX: rotationX ?? this.rotationX,
-      rotationY: rotationY ?? this.rotationY,
-      gravityRule: gravityRule ?? this.gravityRule,
-      fieldSize: fieldSize ?? this.fieldSize,
-      lives: lives ?? this.lives,
-      isGameOver: isGameOver ?? this.isGameOver,
-      winnerName: winnerName ?? this.winnerName,
-    );
+class SizeMapper extends SimpleMapper<Size> {
+  const SizeMapper();
+
+  @override
+  Size decode(dynamic value) {
+    return Size(value['width'], value['height']);
+  }
+
+  @override
+  dynamic encode(Size self) {
+    return {'width': self.width, 'height': self.height};
   }
 }

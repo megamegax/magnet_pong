@@ -1,7 +1,11 @@
 import 'dart:ui';
 import 'dart:math';
+import 'package:dart_mappable/dart_mappable.dart';
 
-class Ball {
+part 'ball.mapper.dart';
+
+@MappableClass(includeCustomMappers: [OffsetMapper(), ColorMapper()])
+class Ball with BallMappable {
   final Offset position;
   final Offset velocity;
   final double mass;
@@ -19,18 +23,36 @@ class Ball {
     // Példa: a radius a mass négyzetgyökén alapul
     return sqrt(mass);
   }
+}
 
-  Ball copyWith({
-    Offset? position,
-    Offset? velocity,
-    double? mass,
-    Color? color,
-  }) {
-    return Ball(
-      position: position ?? this.position,
-      velocity: velocity ?? this.velocity,
-      mass: mass ?? this.mass,
-      color: color ?? this.color,
-    );
+class OffsetMapper extends SimpleMapper<Offset> {
+  const OffsetMapper();
+  @override
+  Offset decode(dynamic value) {
+    if (value is Map<String, dynamic>) {
+      return Offset(value['dx'], value['dy']);
+    }
+    throw Exception('Cannot decode Offset from $value');
+  }
+
+  @override
+  dynamic encode(Offset value) {
+    return {'dx': value.dx, 'dy': value.dy};
+  }
+}
+
+class ColorMapper extends SimpleMapper<Color> {
+  const ColorMapper();
+  @override
+  Color decode(dynamic value) {
+    if (value is int) {
+      return Color(value);
+    }
+    throw Exception('Cannot decode Color from $value');
+  }
+
+  @override
+  dynamic encode(Color value) {
+    return value.value;
   }
 }

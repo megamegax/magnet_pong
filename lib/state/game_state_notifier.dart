@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:magnet_pong/ai/ai_player.dart';
+import 'package:magnet_pong/networking/local_network_service.dart';
 import '../models/ball.dart';
 import '../models/element_type.dart';
 import '../models/gravity_rule.dart';
@@ -13,17 +14,20 @@ import 'game_state.dart';
 import 'game_state_args.dart';
 
 class GameStateNotifier extends StateNotifier<GameState> {
-  GameStateNotifier(
-      List<Player> activePlayers, Player currentPlayer, GravityRule gravityRule)
+  bool isHost;
+  GameStateNotifier(List<Player> activePlayers, Player currentPlayer,
+      GravityRule gravityRule, this.networkService, this.isHost)
       : super(GameState.initial(activePlayers, currentPlayer, gravityRule)) {
-    _startFieldRotationUpdate();
-    _startChargeUpdate();
-    _startBallUpdate();
-    for (var player in activePlayers) {
-      if (player.isAI) {
-        AIPlayer aiPlayer = AIPlayer(player: player);
-        startAIPlayer(aiPlayer);
-        aiPlayers.add(aiPlayer);
+    if (isHost) {
+      _startFieldRotationUpdate();
+      _startChargeUpdate();
+      _startBallUpdate();
+      for (var player in activePlayers) {
+        if (player.isAI) {
+          AIPlayer aiPlayer = AIPlayer(player: player);
+          startAIPlayer(aiPlayer);
+          aiPlayers.add(aiPlayer);
+        }
       }
     }
   }
@@ -32,6 +36,18 @@ class GameStateNotifier extends StateNotifier<GameState> {
   Timer? _fieldRotationTimer;
   Timer? _chargeTimer;
   Timer? _ballUpdateTimer;
+  final LocalNetworkService? networkService;
+
+  void updateFromNetwork(Map<String, dynamic> gameStateData) {
+    print('Updating game state from network data');
+    final newState = GameStateMapper.fromMap(gameStateData);
+    state = newState;
+  }
+
+  Map<String, dynamic> toMap() {
+    // Visszaadja az aktuális állapotot Map formában a hálózati küldéshez
+    return state.toMap();
+  }
 
   void _startChargeUpdate() {
     _chargeTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
@@ -165,6 +181,22 @@ class GameStateNotifier extends StateNotifier<GameState> {
     newBalls = checkAndHandleBallCollisions(newBalls);
     // Állapot frissítése a módosított labdákkal és életekkel
     state = state.copyWith(balls: newBalls, lives: updatedLives);
+    if (isHost) {
+      networkService?.broadcastGameState(state.toJson());
+    }
+  }
+
+  void handlePlayerInput(String playerId, Map<String, dynamic> inputData) {
+    // Keresd meg a játékost az ID alapján
+    final player = state.activePlayers.firstWhere((p) => p.id == playerId);
+
+    // Kezeld a bemenetet
+    if (inputData['action'] == 'movePaddle') {
+      double delta = inputData['delta'];
+      movePaddle(player, delta);
+    } else if (inputData['action'] == 'shootBall') {
+      shootBall(player);
+    }
   }
 
   double calculateScaleFactor(double rotationX, double rotationY) {
@@ -431,6 +463,15 @@ class GameStateNotifier extends StateNotifier<GameState> {
   }
 
   void movePaddle(Player player, double delta) {
+    if (!isHost) {
+      networkService?.sendInput({
+        'type': 'input',
+        'playerId': player.id,
+        'action': 'movePaddle',
+        'delta': delta,
+      });
+      return;
+    }
     final newPaddles = {...state.paddles};
     final paddle = newPaddles[player.position]!;
 
@@ -457,6 +498,15 @@ class GameStateNotifier extends StateNotifier<GameState> {
   }
 
   void shootBall(Player player) {
+    if (!isHost) {
+      // Kliens oldalon elküldjük a bemenetet a hostnak
+      networkService?.sendInput({
+        'type': 'input',
+        'playerId': player.id,
+        'action': 'shootBall',
+      });
+      return;
+    }
     final newPaddles = {...state.paddles};
     final paddle = newPaddles[player.position]!;
     if (paddle.canShoot()) {
@@ -614,9 +664,6 @@ class GameStateNotifier extends StateNotifier<GameState> {
 
 final gameStateProvider =
     StateNotifierProvider.family<GameStateNotifier, GameState, GameStateArgs>(
-  (ref, args) => GameStateNotifier(
-    args.activePlayers,
-    args.currentPlayer,
-    args.gravityRule,
-  ),
+  (ref, args) => GameStateNotifier(args.activePlayers, args.currentPlayer,
+      args.gravityRule, args.networkService, args.isHost),
 );

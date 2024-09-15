@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:magnet_pong/screens/lobby_screen.dart';
 import 'package:magnet_pong/screens/settings_screen.dart';
+import 'package:magnet_pong/screens/local_multiplayer_screen.dart'; // Új import
 import 'package:magnet_pong/widgets/neon_button.dart';
 
 class MainMenu extends StatelessWidget {
@@ -33,24 +34,39 @@ class MainMenu extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             NeonButton(
-                text: 'Start Game',
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LobbyScreen()));
-                }),
+              text: 'Start Online Game',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LobbyScreen()),
+                );
+              },
+            ),
             const SizedBox(height: 20),
             NeonButton(
-                text: 'Settings',
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SettingsScreen()));
-                }),
+              text: 'Start Local Game',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const LocalMultiplayerScreen()),
+                );
+              },
+            ),
             const SizedBox(height: 20),
             NeonButton(
-                text: 'Exit',
-                onPressed: () {
-                  // Kilépés logika
-                }),
+              text: 'Settings',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SettingsScreen()),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            NeonButton(
+              text: 'Exit',
+              onPressed: () {
+                // Kilépés logika
+              },
+            ),
           ],
         ),
       ),

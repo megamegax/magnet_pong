@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NeonButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   double horizontalPadding;
   double verticalPadding;
   double fontSize;
@@ -21,7 +21,7 @@ class NeonButton extends StatelessWidget {
   }
 
   Widget _buildNeonButton(BuildContext context, String text,
-      {required VoidCallback onPressed}) {
+      {required VoidCallback? onPressed}) {
     final theme = Theme.of(context);
 
     return ElevatedButton(

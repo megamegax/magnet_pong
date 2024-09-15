@@ -1,8 +1,11 @@
 import 'dart:math';
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:flutter/material.dart';
 import 'package:magnet_pong/models/player.dart';
+part 'paddle.mapper.dart';
 
-class Paddle {
+@MappableClass()
+class Paddle with PaddleMappable {
   Offset position;
   final double width;
   final double height;
@@ -49,24 +52,6 @@ class Paddle {
     position = Offset(position.dx, position.dy + delta);
   }
 
-  Paddle copyWith({
-    Offset? position,
-    double? width,
-    double? height,
-    Color? color,
-    double? charge,
-    Offset? movementDelta,
-    Player? player,
-  }) {
-    return Paddle(
-        position: position ?? this.position,
-        width: width ?? this.width,
-        height: height ?? this.height,
-        charge: charge ?? this.charge,
-        movementDelta: movementDelta ?? this.movementDelta,
-        player: player ?? this.player);
-  }
-
   Paddle updateCharge(double amount) {
     final double newCharge = min(charge + amount, 100);
     return copyWith(charge: newCharge);
@@ -79,4 +64,5 @@ class Paddle {
   bool canShoot() {
     return charge >= 1; // Legalább 10-es töltöttség szükséges a lövéshez
   }
+
 }

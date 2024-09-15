@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:magnet_pong/models/gravity_rule.dart';
 import 'package:magnet_pong/models/player_position.dart';
+import 'package:magnet_pong/networking/local_network_service.dart';
 import 'package:magnet_pong/state/game_state_args.dart';
 import 'package:magnet_pong/painters/game_painter.dart';
 import '../models/player.dart';
@@ -13,27 +14,48 @@ class GameScreen extends ConsumerWidget {
   final Player currentPlayer;
   final List<Player> activePlayers;
   final GravityRule gravityRule;
+  final LocalNetworkService? networkService;
 
   const GameScreen({
-    super.key,
+    Key? key,
     required this.currentPlayer,
     required this.activePlayers,
     required this.gravityRule,
-  });
+    this.networkService,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-
     final gameStateArgs = GameStateArgs(
       activePlayers: activePlayers,
       currentPlayer: currentPlayer,
       gravityRule: gravityRule,
+      networkService: networkService,
+      isHost: networkService?.isHost ?? false,
     );
 
     Future.microtask(() {
       ref.read(gameStateProvider(gameStateArgs).notifier).updateFieldSize(size);
     });
+
+    final gameStateNotifier =
+        ref.read(gameStateProvider(gameStateArgs).notifier);
+
+    if (networkService != null) {
+      if (networkService!.isHost) {
+        networkService!.onInputReceived = (playerId, inputData) {
+          gameStateNotifier.handlePlayerInput(playerId, inputData);
+        };
+      } else {
+        networkService!.onGameStateReceived = (gameStateData) {
+          print('Received game state from host');
+          ref
+              .read(gameStateProvider(gameStateArgs).notifier)
+              .updateFromNetwork(gameStateData);
+        };
+      }
+    }
 
     final gameState = ref.watch(gameStateProvider(gameStateArgs));
 
